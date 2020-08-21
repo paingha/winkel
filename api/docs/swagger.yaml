@@ -1,0 +1,471 @@
+basePath: /v1
+definitions:
+  models.Categories:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updatedAt:
+        type: string
+      uuid:
+        type: string
+    type: object
+  models.Subcategories:
+    properties:
+      categoryId:
+        type: integer
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      description:
+        type: string
+      featuredImage:
+        type: string
+      icon:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updatedAt:
+        type: string
+    type: object
+  models.User:
+    properties:
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      email:
+        type: string
+      emailVerified:
+        type: boolean
+      firstName:
+        type: string
+      id:
+        type: integer
+      isAdmin:
+        type: boolean
+      lastName:
+        type: string
+      password:
+        type: string
+      phoneNumber:
+        type: string
+      phoneVerified:
+        type: boolean
+      phoneVerifyCode:
+        type: string
+      phoneVerifyExpiresAt:
+        type: string
+      phoneVerifySentAt:
+        type: string
+      updatedAt:
+        type: string
+      verifyCode:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: apaingha@gmail.com
+    name: Paingha Joe Alagoa
+    url: https://www.iamjollof.com/open-source/winkel
+  description: This is an api server for an online store.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: https://www.iamjollof.com/open-source/winkel/license
+  title: Winkel Ecommerce Store API
+  version: "1.0"
+paths:
+  /category:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Categories'
+      security:
+      - ApiKeyAuth: []
+      summary: List all Categories
+      tags:
+      - Category
+  /category/{id}:
+    delete:
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Categories'
+      security:
+      - ApiKeyAuth: []
+      summary: Deletes a category based on given ID
+      tags:
+      - Category
+    get:
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Categories'
+      security:
+      - ApiKeyAuth: []
+      summary: Retrieves category based on given ID
+      tags:
+      - Category
+    patch:
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Categories'
+      security:
+      - ApiKeyAuth: []
+      summary: Updates category based on given ID
+      tags:
+      - Category
+  /category/create:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new Category
+      parameters:
+      - description: Create Category
+        in: body
+        name: category
+        required: true
+        schema:
+          $ref: '#/definitions/models.Categories'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Categories'
+      security:
+      - ApiKeyAuth: []
+      summary: Creates a new Category
+      tags:
+      - Category
+  /subcategory:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Subcategories'
+      security:
+      - ApiKeyAuth: []
+      summary: List all Subcategories
+      tags:
+      - Subcategory
+  /subcategory/:id/my:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Subcategories'
+      security:
+      - ApiKeyAuth: []
+      summary: List all my Subcategories
+      tags:
+      - Subcategory
+  /subcategory/{id}:
+    delete:
+      parameters:
+      - description: Subcategory ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Subcategories'
+      security:
+      - ApiKeyAuth: []
+      summary: Deletes a subcategory based on given ID
+      tags:
+      - Subcategory
+    get:
+      parameters:
+      - description: Subcategory ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Subcategories'
+      security:
+      - ApiKeyAuth: []
+      summary: Retrieves subcategory based on given ID
+      tags:
+      - Subcategory
+    patch:
+      parameters:
+      - description: Subcategory ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Subcategories'
+      security:
+      - ApiKeyAuth: []
+      summary: Updates subcategory based on given ID
+      tags:
+      - Subcategory
+  /subcategory/create:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new Subcategory
+      parameters:
+      - description: Create Subcategory
+        in: body
+        name: subcategory
+        required: true
+        schema:
+          $ref: '#/definitions/models.Subcategories'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Subcategories'
+      security:
+      - ApiKeyAuth: []
+      summary: Creates a new Subcategory
+      tags:
+      - Subcategory
+  /user:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+      security:
+      - ApiKeyAuth: []
+      summary: List all registered Users
+      tags:
+      - User Auth
+  /user/{id}:
+    delete:
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+      security:
+      - ApiKeyAuth: []
+      summary: Deletes a user based on given ID
+      tags:
+      - User Auth
+    get:
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+      security:
+      - ApiKeyAuth: []
+      summary: Retrieves user based on given ID
+      tags:
+      - User Auth
+    patch:
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+      security:
+      - ApiKeyAuth: []
+      summary: Updates user based on given ID
+      tags:
+      - User Auth
+  /user/forgot:
+    post:
+      consumes:
+      - application/json
+      description: Forgot User Password Endpoint
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+      summary: Forgot User Password Endpoint
+      tags:
+      - User Auth
+  /user/login:
+    post:
+      consumes:
+      - application/json
+      description: Login a user by sending jwt
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+      summary: Logins a User
+      tags:
+      - User Auth
+  /user/register:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new User account
+      parameters:
+      - description: Create User Account
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+      summary: Registers a new User
+      tags:
+      - User Auth
+  /user/verify-email:
+    post:
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+      summary: Verifies a user's email
+      tags:
+      - User Auth
+  /user/verify-phone-code/:id:
+    post:
+      consumes:
+      - application/json
+      description: Sets phone verified to true if the code is correct and not expired.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+      summary: Verifies user's phone verification code.
+      tags:
+      - User Auth
+  /user/verify-phone/:id:
+    post:
+      consumes:
+      - application/json
+      description: Verifies user by sending verification code to user through whatsapp or sms
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+      security:
+      - ApiKeyAuth: []
+      summary: Send phone code to verify User's phone number
+      tags:
+      - User Auth
+schemes:
+- http
+- https
+swagger: "2.0"

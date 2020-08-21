@@ -1,0 +1,22 @@
+
+export ENV_PROD_DB_HOST=localhost
+export ENV_PROD_DB_PORT=5432
+export ENV_PROD_DB_USER=postgres
+export ENV_PROD_DB_PASS=123456
+export ENV_PROD_DB_DATABASE=winkel
+export ENV_PROD_DB_SSL=disable
+export ENV_DEV_DB_HOST=localhost
+export ENV_DEV_DB_PORT=5432
+export ENV_DEV_DB_USER=postgres
+export ENV_DEV_DB_PASS=123456
+export ENV_DEV_DB_DATABASE=winkel
+export ENV_DEV_DB_SSL=disable
+export JWT_SECRET=A_RANDOM_STRING_TO_BE_USED_TO_SIGN_JWT_TOKENS
+export ENV_SENDGRID_API_KEY=YOUR_SENDGRID_API_KEY_GOES_HERE
+export ENV_SENDER_EMAIL=YOUR_SENDGRID_SENDER_EMAIL_GOES_HERE
+export ENV_BASE_URL=YOUR_BASE_DOMAIN_NAME_GOES_HERE (http://localhost:8080/v1)
+go mod vendor
+go build
+api.exe
+
+pause

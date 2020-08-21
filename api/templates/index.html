@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Winkel - By I Am Jollof</title>
+    <link rel="stylesheet" href="/public/main.css">
+    <style>
+        *{
+            font-family: 'Open Sans', sans-serif;
+        }
+        html, body{
+            margin: 0;
+            padding: 0;
+        }
+        body {
+          background-color: #282c34;
+          min-height: 100vh;
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          color: white;
+        }
+        .main-wrapper{
+          display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */
+          display: -moz-box;         /* OLD - Firefox 19- (buggy but mostly works) */
+          display: -ms-flexbox;      /* TWEENER - IE 10 */
+          display: -webkit-flex;     /* NEW - Chrome */
+          display:flex;
+          width: 100%;
+          min-height: 100vh;
+          height: auto;
+          flex-direction: column;
+          align-content: center;
+          align-items: center;
+          justify-content: center;
+          margin: 0;
+          font-family: 'Open Sans', sans-serif;
+        }
+        .login-wrapper{
+            width: 100%;
+            min-height: 100vh;
+            height: auto;
+            background-color: #FFE69C;
+            display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */
+            display: -moz-box;         /* OLD - Firefox 19- (buggy but mostly works) */
+            display: -ms-flexbox;      /* TWEENER - IE 10 */
+            display: -webkit-flex;     /* NEW - Chrome */
+            display:flex;
+            flex-direction: column;
+            align-content: center;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .login-header{
+          font-size: 28px;
+          color: #757575;
+          margin-bottom: 1.5em;
+          text-align: center;
+        }
+        .bottom-link-wrapper{
+          margin-top: 12px;
+          width: 100%;
+          display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */
+          display: -moz-box;         /* OLD - Firefox 19- (buggy but mostly works) */
+          display: -ms-flexbox;      /* TWEENER - IE 10 */
+          display: -webkit-flex;     /* NEW - Chrome */
+          display:flex;
+          flex-direction: row;
+          align-content: space-around;
+          align-items: center;
+          justify-content: space-around;
+          color: #757575;
+          flex-wrap: wrap;
+        }
+        .bottom-link{
+          color: #757575;
+        }
+        .bottom-institution-info{
+          margin-top: 10px;
+          color: #FFFFFF;
+          margin-bottom: 15px;
+        }
+        .bottom-institution-link{
+          color: #FFFFFF;
+        }
+        .bottom-institution-info p{
+          margin: 5px;
+        }
+        .login-sub-wrapper{
+          width: 30%;
+          min-height: 45vh;
+          padding-bottom: 0.6em;
+          height: auto;
+          background-color: #ffffff;
+          display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */
+          display: -moz-box;         /* OLD - Firefox 19- (buggy but mostly works) */
+          display: -ms-flexbox;      /* TWEENER - IE 10 */
+          display: -webkit-flex;     /* NEW - Chrome */
+          display:flex;
+          flex-direction: column;
+          align-content: center;
+          align-items: center;
+          justify-content: center;
+          border-radius: 8px;
+          box-shadow:0 4px 6px rgba(50,50,93,0.20),0 1px 3px rgba(0,0,0,0.10);
+        }
+        .logo{
+          height: 70px;
+          width: auto;
+          margin-bottom: 2em;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-wrapper">
+        <img src="https://paingha.github.io/iamjollof/assets/img/jollofpng.png" class="logo"/>
+        <div class="login-sub-wrapper">
+        <p class="login-header">Winkel: <br /><strong>API Gateway</strong></p>
+        <div class="bottom-link-wrapper">
+            <a class="bottom-link" href="/register"><p>API Status Page</p></a>
+            <a class="bottom-link" href="/swagger/index.html"><p>API Documentation</p></a>
+        </div>
+        </div>
+    </div>
+</body>
+</html>
