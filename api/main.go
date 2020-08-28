@@ -48,6 +48,7 @@ func main() {
 	config.DB.AutoMigrate(&models.User{})
 	config.DB.AutoMigrate(&models.Categories{})
 	config.DB.AutoMigrate(&models.Subcategories{})
+	config.DB.AutoMigrate(&models.Products{})
 	localServer := ":8080"
 	//setup routes
 	r := routes.SetupRouter()

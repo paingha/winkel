@@ -15,6 +15,33 @@ definitions:
       uuid:
         type: string
     type: object
+  models.Products:
+    properties:
+      categoryId:
+        type: integer
+      createdAt:
+        type: string
+      deletedAt:
+        type: string
+      description:
+        type: string
+      featuredImage:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      price:
+        type: number
+      stock:
+        type: integer
+      subcategoryId:
+        type: integer
+      updatedAt:
+        type: string
+      uuid:
+        type: string
+    type: object
   models.Subcategories:
     properties:
       categoryId:
@@ -181,6 +208,116 @@ paths:
       summary: Creates a new Category
       tags:
       - Category
+  /product:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Products'
+      security:
+      - ApiKeyAuth: []
+      summary: List all Products
+      tags:
+      - Product
+  /product/{id}:
+    delete:
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Products'
+      security:
+      - ApiKeyAuth: []
+      summary: Deletes a product based on given ID
+      tags:
+      - Product
+    get:
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Products'
+      security:
+      - ApiKeyAuth: []
+      summary: Retrieves product based on given ID
+      tags:
+      - Product
+    patch:
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Products'
+      security:
+      - ApiKeyAuth: []
+      summary: Updates product based on given ID
+      tags:
+      - Product
+  /product/by-catgeory:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Products'
+      security:
+      - ApiKeyAuth: []
+      summary: List all Products by Category and Sub Category
+      tags:
+      - Product
+  /product/create:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new Product
+      parameters:
+      - description: Create Product
+        in: body
+        name: product
+        required: true
+        schema:
+          $ref: '#/definitions/models.Products'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Products'
+      security:
+      - ApiKeyAuth: []
+      summary: Creates a new Product
+      tags:
+      - Product
   /subcategory:
     get:
       produces:

@@ -14,6 +14,9 @@ func SetupRouter() *gin.Engine {
 	{
 		RootRouter(r)
 		UserRouter(r)
+		CategoryRouter(r)
+		SubCategoryRouter(r)
+		ProductRouter(r)
 	}
 	return r
 }

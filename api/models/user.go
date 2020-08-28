@@ -46,16 +46,16 @@ func (u *User) TableName() string {
 }
 
 //GetAllUsers - fetch all users at once
-func GetAllUsers(user *[]User, offset int, limit int) (counts int, err error) {
+func GetAllUsers(user *[]User, offset int, limit int) (int, error) {
 	var count = 0
-	if err = config.DB.Model(&User{}).Count(&count).Order("created_at desc").Offset(offset).Limit(limit).Find(user).Error; err != nil {
+	if err := config.DB.Model(&User{}).Count(&count).Order("created_at desc").Offset(offset).Limit(limit).Find(user).Error; err != nil {
 		return count, err
 	}
 	return count, nil
 }
 
 //CreateUser - create a user
-func CreateUser(user *User) (created bool, err error) {
+func CreateUser(user *User) (bool, error) {
 	var dbUser User
 	if err := config.DB.Where("email = ?", user.Email).First(&dbUser).Error; err != nil {
 		if err.Error() == "record not found" {
@@ -67,8 +67,6 @@ func CreateUser(user *User) (created bool, err error) {
 			emailBody["first_name"] = user.FirstName
 			emailBody["last_name"] = user.LastName
 			emailBody["link"] = fmt.Sprintf("%s/user/0/verify-email?token=%s", baseURL, base64.StdEncoding.EncodeToString([]byte(user.VerifyCode)))
-			fmt.Printf("VALIDATION TOKEN >> %s ", emailBody["link"])
-
 			emailInfo := mailer.EmailParam{
 				To:        user.Email,
 				Subject:   "Welcome to Winkel Verify your email",
@@ -84,14 +82,13 @@ func CreateUser(user *User) (created bool, err error) {
 }
 
 //LoginUser - fetch one user
-func LoginUser(user *User) (mainUser User, token string, err error) {
+func LoginUser(user *User) (User, string, error) {
 	var dbUser User
 	jwtSecretByte := []byte(os.Getenv("JWT_SECRET"))
 	expiresAt := time.Now().Add(1200 * time.Minute)
 	if err := config.DB.Model(&user).Where(&User{Email: user.Email}).First(&dbUser).Error; err != nil {
 		return User{}, "", err
 	}
-	//compare db password hash and password provided
 	resp := security.VerifyHash([]byte(dbUser.Password), []byte(user.Password))
 	if !resp {
 		return User{}, "", nil
@@ -100,13 +97,10 @@ func LoginUser(user *User) (mainUser User, token string, err error) {
 		UserID:  user.ID,
 		IsAdmin: user.IsAdmin,
 		StandardClaims: jwt.StandardClaims{
-			// In JWT, the expiry time is expressed as unix milliseconds
 			ExpiresAt: expiresAt.Unix(),
 		},
 	}
-	// Declare the token with the algorithm used for signing, and the claims
 	tokens := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	// Create the JWT string
 	tokenString, errs := tokens.SignedString(jwtSecretByte)
 	if errs != nil {
 		return User{}, "", errs
@@ -116,7 +110,7 @@ func LoginUser(user *User) (mainUser User, token string, err error) {
 }
 
 //GetUser - fetch one user
-func GetUser(user *User, id int) (err error) {
+func GetUser(user *User, id int) error {
 	if err := config.DB.Where("id = ?", id).First(user).Error; err != nil {
 		return err
 	}
@@ -124,7 +118,7 @@ func GetUser(user *User, id int) (err error) {
 }
 
 //VerifyEmailUser - verify user's email
-func VerifyEmailUser(user *User, token string) (err error) {
+func VerifyEmailUser(user *User, token string) error {
 	if err := config.DB.Model(&user).Where(&User{VerifyCode: token}).Updates(map[string]interface{}{"email_verified": true, "verify_code": ""}).Error; err != nil {
 		return err
 	}
@@ -132,7 +126,7 @@ func VerifyEmailUser(user *User, token string) (err error) {
 }
 
 //SendVerifyPhoneUser - send verification code to user's phone number
-func SendVerifyPhoneUser(user *User, id int, code string, medium string) (err error) {
+func SendVerifyPhoneUser(user *User, id int, code, medium string) error {
 	current := time.Now()
 	future := current.Add(time.Minute * 30) //expires after 30 minutes of being sent
 	if err := config.DB.Model(&user).Where(&User{ID: id}).Updates(map[string]interface{}{"phone_number": user.PhoneNumber, "phone_verify_sent_at": current, "phone_verify_expires_at": future, "phone_verify_code": code}).Error; err != nil {
@@ -143,13 +137,12 @@ func SendVerifyPhoneUser(user *User, id int, code string, medium string) (err er
 		To:      user.PhoneNumber,
 		Medium:  medium,
 	}
-	sms.SendSMS(message) //Sends to sms message queue
-
+	sms.SendSMS(message)
 	return nil
 }
 
 //VerifyPhoneUser - verifies the verify code and expiry time and then sets phone_verified to true
-func VerifyPhoneUser(user *User, id int, token string) (verified bool, err error) {
+func VerifyPhoneUser(user *User, id int, token string) (bool, error) {
 	var dbUser User
 	current := time.Now()
 	if err := config.DB.Where("id = ?", id).First(&dbUser).Error; err != nil {
@@ -165,13 +158,15 @@ func VerifyPhoneUser(user *User, id int, token string) (verified bool, err error
 }
 
 //UpdateUser - update a user
-func UpdateUser(user *User, id int) (err error) {
-	config.DB.Model(&user).Omit("is_admin", "email_verified", "password", "verify_code", "phone_verified", "phone_verify_code", "created_at", "updated_at", "deleted_at", "phone_verify_sent_at", "phone_verify_expires_at").Updates(user)
+func UpdateUser(user *User, id int) error {
+	if err := config.DB.Model(&user).Omit("is_admin", "email_verified", "password", "verify_code", "phone_verified", "phone_verify_code", "created_at", "updated_at", "deleted_at", "phone_verify_sent_at", "phone_verify_expires_at").Updates(user).Error; err != nil {
+		return err
+	}
 	return nil
 }
 
 //DeleteUser - delete a user
-func DeleteUser(id int) (err error) {
+func DeleteUser(id int) error {
 	if err := config.DB.Where("id = ?", id).Unscoped().Delete(User{}).Error; err != nil {
 		return err
 	}
@@ -179,36 +174,29 @@ func DeleteUser(id int) (err error) {
 }
 
 //ForgotUser - sends a forgot password email to a user
-func ForgotUser(user *User) (created bool, err error) {
+func ForgotUser(user *User) (bool, error) {
 	var dbUser User
 	if err := config.DB.Where("email = ?", user.Email).First(&dbUser).Error; err != nil {
 		return false, err
 	}
-	//Send Verification email to Rabbitmq
 	jwtSecretByte := []byte(os.Getenv("JWT_SECRET"))
 	expiresAt := time.Now().Add(30 * time.Minute)
 	emailBody := make(map[string]string)
 	emailBody["first_name"] = dbUser.FirstName
 	emailBody["last_name"] = dbUser.LastName
-	//Create a jwt token here
 	claims := &security.Claims{
 		UserID: dbUser.ID,
 		StandardClaims: jwt.StandardClaims{
-			// In JWT, the expiry time is expressed as unix milliseconds
 			ExpiresAt: expiresAt.Unix(),
 		},
 	}
-	// Declare the token with the algorithm used for signing, and the claims
 	tokens := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	// Create the JWT string
 	tokenString, errs := tokens.SignedString(jwtSecretByte)
 	if errs != nil {
 		return false, errs
 	}
-	//end
 	baseURL := os.Getenv("ENV_BASE_URL")
 	emailBody["link"] = fmt.Sprintf("%s/user/0/forgot-password?token=%s", baseURL, base64.StdEncoding.EncodeToString([]byte(tokenString)))
-
 	emailInfo := mailer.EmailParam{
 		To:        user.Email,
 		Subject:   "Password Reset",

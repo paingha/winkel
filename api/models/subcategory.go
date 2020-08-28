@@ -29,25 +29,25 @@ func (Subcategories) TableName() string {
 }
 
 //GetAllSubcategories - fetch all subcategories at once
-func GetAllSubcategories(subcategory *[]Subcategories, offset int, limit int) (counts int, err error) {
+func GetAllSubcategories(subcategory *[]Subcategories, offset int, limit int) (int, error) {
 	var count = 0
-	if err = config.DB.Model(&Subcategories{}).Count(&count).Order("created_at desc").Offset(offset).Limit(limit).Find(subcategory).Error; err != nil {
+	if err := config.DB.Model(&Subcategories{}).Count(&count).Order("created_at desc").Offset(offset).Limit(limit).Find(subcategory).Error; err != nil {
 		return count, err
 	}
 	return count, nil
 }
 
 //GetCategorySubcategories - fetch conversation subcategories
-func GetCategorySubcategories(subcategory *[]Subcategories, id int, offset int, limit int) (counts int, err error) {
+func GetCategorySubcategories(subcategory *[]Subcategories, id int, offset int, limit int) (int, error) {
 	var count = 0
-	if err = config.DB.Model(&Subcategories{}).Where("category_id = ?", id).Count(&count).Order("created_at desc").Offset(offset).Limit(limit).Find(subcategory).Error; err != nil {
+	if err := config.DB.Model(&Subcategories{}).Where("category_id = ?", id).Count(&count).Order("created_at desc").Offset(offset).Limit(limit).Find(subcategory).Error; err != nil {
 		return count, err
 	}
 	return count, nil
 }
 
 //CreateSubcategory - create a subcategory
-func CreateSubcategory(subcategory *Subcategories) (created bool, err error) {
+func CreateSubcategory(subcategory *Subcategories) (bool, error) {
 	if err := config.DB.Create(subcategory).Error; err != nil {
 		return false, err
 	}
@@ -55,7 +55,7 @@ func CreateSubcategory(subcategory *Subcategories) (created bool, err error) {
 }
 
 //GetSubcategory - fetch one subcategory
-func GetSubcategory(subcategory *Subcategories, id int) (err error) {
+func GetSubcategory(subcategory *Subcategories, id int) error {
 	if err := config.DB.Where("id = ?", id).First(subcategory).Error; err != nil {
 		return err
 	}
@@ -63,13 +63,15 @@ func GetSubcategory(subcategory *Subcategories, id int) (err error) {
 }
 
 //UpdateSubcategory - update a subcategory
-func UpdateSubcategory(subcategory *Subcategories, id int) (err error) {
-	config.DB.Model(&subcategory).Where("id = ?", id).Updates(subcategory)
+func UpdateSubcategory(subcategory *Subcategories, id int) error {
+	if err := config.DB.Model(&subcategory).Where("id = ?", id).Updates(subcategory).Error; err != nil {
+		return err
+	}
 	return nil
 }
 
 //DeleteSubcategory - delete a subcategory
-func DeleteSubcategory(id int) (err error) {
+func DeleteSubcategory(id int) error {
 	if err := config.DB.Where("id = ?", id).Unscoped().Delete(Subcategories{}).Error; err != nil {
 		return err
 	}

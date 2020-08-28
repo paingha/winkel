@@ -26,16 +26,16 @@ func (Categories) TableName() string {
 }
 
 //GetAllCategories - fetch all categories at once
-func GetAllCategories(category *[]Categories, offset int, limit int) (counts int, err error) {
+func GetAllCategories(category *[]Categories, offset int, limit int) (int, error) {
 	var count = 0
-	if err = config.DB.Model(&Categories{}).Count(&count).Order("created_at desc").Offset(offset).Limit(limit).Find(category).Error; err != nil {
+	if err := config.DB.Model(&Categories{}).Count(&count).Order("created_at desc").Offset(offset).Limit(limit).Find(category).Error; err != nil {
 		return count, err
 	}
 	return count, nil
 }
 
 //CreateCategory - create a category
-func CreateCategory(category *Categories) (created bool, err error) {
+func CreateCategory(category *Categories) (bool, error) {
 	if err := config.DB.Create(category).Error; err != nil {
 		return false, err
 	}
@@ -43,7 +43,7 @@ func CreateCategory(category *Categories) (created bool, err error) {
 }
 
 //GetCategory - fetch one category
-func GetCategory(category *Categories, id int) (err error) {
+func GetCategory(category *Categories, id int) error {
 	if err := config.DB.Where("id = ?", id).First(category).Error; err != nil {
 		return err
 	}
@@ -51,13 +51,15 @@ func GetCategory(category *Categories, id int) (err error) {
 }
 
 //UpdateCategory - update a category
-func UpdateCategory(category *Categories, id int) (err error) {
-	config.DB.Model(&category).Where("id = ?", id).Updates(category)
+func UpdateCategory(category *Categories, id int) error {
+	if err := config.DB.Model(&category).Where("id = ?", id).Updates(category).Error; err != nil {
+		return err
+	}
 	return nil
 }
 
 //DeleteCategory - delete a category
-func DeleteCategory(id int) (err error) {
+func DeleteCategory(id int) error {
 	if err := config.DB.Where("id = ?", id).Unscoped().Delete(Categories{}).Error; err != nil {
 		return err
 	}
