@@ -13,9 +13,9 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/jinzhu/gorm"
 	"github.com/paingha/winkel/api/config"
 	"github.com/paingha/winkel/api/models"
-	"github.com/jinzhu/gorm"
 
 	"github.com/paingha/winkel/api/routes"
 	"github.com/stretchr/testify/assert"
@@ -74,7 +74,7 @@ func TestLoginUserRightHandler(t *testing.T) {
 	testRouter := routes.SetupRouter()
 	body, _ := json.Marshal(map[string]string{
 		"email":    "apaingha@gmail.com",
-		"password": "Computer2",
+		"password": "123456",
 	})
 	Body := bytes.NewBuffer(body)
 
